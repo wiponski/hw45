@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library</title>
+</head>
+<body>
+<div class="card" style="width: 18rem;">
+
+    <div class="card-body">
+        <h5 class="card-title">${books.id}</h5>
+        <p class="card-text">${books.name}</p>
+        <p class="card-text"> Created at:  <u>${books.name}</u> </p>
+    </div>
+    <div class="card-body">
+        <ul>
+            <#list customerDataList as customer>
+            <li class="${customer?item_parity}">${customer.id} ${customer.name}</li>
+        </#list>
+        </ul>
+    </div>
+
+
+</div>
+
+
+</body>
+</html>
