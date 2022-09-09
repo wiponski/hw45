@@ -12,10 +12,10 @@ public class LibraryDataModel {
     private List<BookData> bookDataList = new ArrayList<>();
 
     public LibraryDataModel() {
-        this.customerDataList= com.company.FileService.readCustomers();
-      this.bookDataList= com.company.FileService.readBooks();
-       this.books = new BookData(1, LocalDate.now(), "test testetstetext");
-      this.customers = new CustomerData(1, "Bill");
+        this.customerDataList= FileService.readCustomers();
+        this.bookDataList= FileService.readBooks();
+        this.books = new BookData(1, LocalDate.now(), "test testetstetext");
+        this.customers = new CustomerData(1, "Bill");
 
     }
 

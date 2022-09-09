@@ -1,19 +1,26 @@
-package com.company;
+
+package kz.attractor.java.lesson44;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+
 import kz.attractor.java.lesson44.BookData;
 import kz.attractor.java.lesson44.CustomerData;
+import netscape.javascript.JSException;
+import netscape.javascript.JSObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FileService {
-    static Gson gson =new Gson();
+    private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
     public static List readBooks(){
         Path path = Paths.get("./src/kz/attractor/java/lesson44/books.json");
         String json;
@@ -34,13 +41,27 @@ public class FileService {
         }
         return gson.fromJson(json,List.class);
     }
-
-    public static void writeFile(BookData[] books){
-
-        Gson gson1 = new GsonBuilder().setPrettyPrinting().create();
-        String json = gson1.toJson(books);
-        System.out.println("\n toJson(): ");
-        System.out.println(json);
-
+    public static List<UserData> readUsers(){
+        Path path = Paths.get("users.json");
+        String json;
+        try {
+            json = Files.readString(path);
+        }catch (IOException e){
+            throw new RuntimeException(e);
+        }
+        UserData[] userData = gson.fromJson(json, UserData[].class);
+        return new ArrayList<>(List.of(userData));
     }
+
+    public static void writeFile(List<UserData> data){
+        try (PrintWriter out = new PrintWriter(new FileWriter("users.json"))) {
+            String jsonString = gson.toJson(data);
+            out.write(jsonString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 }
