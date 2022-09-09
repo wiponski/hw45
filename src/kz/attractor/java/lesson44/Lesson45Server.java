@@ -28,13 +28,32 @@ public class Lesson45Server extends Lesson44Server {
         registerPost("/register", this::registerPost);
     }
 
-    private void loginPost(HttpExchange exchange) {
-        String cType = getContentType(exchange);
+    protected void loginPost(HttpExchange exchange) {
         String raw = getBody(exchange);
         Map<String, String> parsed = Utils.parseUrlEncoded(raw, "&");
+        try {
+            if (parsed.size() == 2) {
+                String email = parsed.get("email");
+                String pass = parsed.get("user-password");
+                List<UserData> data = FileService.readUsers();
+                for (UserData user : data) {
+                    if (user.getMail().equals(email)&&user.getPass().equals(pass)) {
+                        redirect303(exchange, "/");
+                    } else {
+                        throw new RuntimeException("Не корректные данные пользователя!");
+                    }
+                }
+            } else {
+                throw new RuntimeException("\"Заполнить поля! <a href=\\\"/register\\\"> вернутся </a>\"");
+            }
 
-        redirect303(exchange, "/");
-
+            } catch (RuntimeException exception) {
+            try {
+                sendByteData(exchange, ResponseCodes.OK, ContentType.TEXT_HTML, exception.getMessage().getBytes());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private void loginGet(HttpExchange exchange) {
